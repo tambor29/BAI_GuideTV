@@ -19,6 +19,7 @@ function pobierzAdress(){
 	if (adres=="" || adres==="undefined"){
 		alert("Brak adresu");
 	}
+	return adres;
 }
 
 function pobierzListeFilmow() {
@@ -33,12 +34,10 @@ function wyswietlListeFimow(nazwaFilmu){
 	xml.open("GET", "http://"+adres+"/list/"+nazwaFilmu, true);
 	xml.onload = "json";
 	xml.onreadystatechange = function(){
-		if (this.readyState === 4)//&& this.readyState === 200)
-		 {
-			console.log(xml.response);
-		}
-	}
-}
+		console.log(xml.response);
+	};
+	xml.send();
+};
 
 function checkConnection() {
     var networkState = navigator.connection.type;
