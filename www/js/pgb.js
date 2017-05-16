@@ -8,10 +8,10 @@ function onDeviceReady() {
 }
 
 function prepareSearchBTN() {
-
 	document.querySelector("#searchButton").addEventListener("click",function(){
-		console.log("test");
 		pobierzAdress();
+		// var zmiena=checkConnection();
+		pobierzListeFilmow();
 	})
 }
 function pobierzAdress(){
@@ -19,8 +19,24 @@ function pobierzAdress(){
 	if (adres=="" || adres==="undefined"){
 		alert("Brak adresu");
 	}
-	else {
-		console.log(adres);
+}
+
+function pobierzListeFilmow() {
+	var nazwaFilmu=document.querySelector("#myFilter").value;
+	var zakodawanaNazwaFilmu= encodeURI(nazwaFilmu);
+	wyswietlListeFimow(nazwaFilmu);
+
+}
+function wyswietlListeFimow(nazwaFilmu){
+	var xml = new XMLHttpRequest();
+	var adres = pobierzAdress();
+	xml.open("GET", "http://"+adres+"/list/"+nazwaFilmu, true);
+	xml.onload = "json";
+	xml.onreadystatechange = function(){
+		if (this.readyState === 4)//&& this.readyState === 200)
+		 {
+			console.log(xml.response);
+		}
 	}
 }
 
@@ -40,7 +56,6 @@ function checkConnection() {
 		if (networkState==states[Connection.NONE] ) {
 	 		alert("Brak sieci");
 			return false;
-
  	}
 	return true;
 }
