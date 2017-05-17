@@ -1,12 +1,12 @@
 function init() {
 	document.addEventListener("deviceready",onDeviceReady, false);
-
+	prepareSearchBTN();
+	walidacjaAdresu();
 }
 
 function onDeviceReady() {
 	navigator.notification.beep(1);
-	prepareSearchBTN();
-	walidacjaAdresu();
+
 }
 
 function prepareSearchBTN() {
@@ -83,7 +83,7 @@ function wyswietlListeFimow(nazwaFilmu, callback){
 	xml.onload = "json";
 	xml.onreadystatechange = function(){
 		if(this.readyState=== 4 && this.status=== 200){
-			alert(test);
+			// alert(test);
 			callback(JSON.parse(xml.response));
 		}
 	};
