@@ -1,6 +1,7 @@
 function init() {
 	document.addEventListener("deviceready",onDeviceReady, false);
 	prepareSearchBTN();
+	walidacjaAdresu();
 }
 
 function onDeviceReady() {
@@ -22,23 +23,70 @@ function pobierzAdress(){
 	return adres;
 }
 
+function walidacjaAdresu(){
+	document.querySelector("#settings").addEventListener("blur", function(){
+		var reg = new RegExp("[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\:[0-9]+");
+		if (!reg.test(this.value)) {
+			alert("Niepoprawny adres");
+		}
+	})
+
+}
+
 function pobierzListeFilmow() {
 	var nazwaFilmu=document.querySelector("#myFilter").value;
 	var zakodawanaNazwaFilmu= encodeURI(nazwaFilmu);
-	wyswietlListeFimow(nazwaFilmu);
+	wyswietlListeFimow(nazwaFilmu, tmp);
 
 }
-function wyswietlListeFimow(nazwaFilmu){
+
+
+
+function tmp(msg){
+	var wiersze = document.querySelectorAll(".filmStyle");
+	for (var i = 0; i < wiersze.length; i++) {
+		var kontener = document.createDocumentFragment();
+		var zdjecie = document.createElement("img");
+		zdjecie.setAttribute("src", msg[i].linkDoZdjecia);
+		kontener.appendChild(zdjecie);
+		var tytul = document.createElement("h3");
+		tytul.appendChild(document.createTextNode(msg[i].movieTitle));
+		kontener.appendChild(tytul);
+		var dane = document.createElement("h5");
+		dane.appendChild(document.createTextNode(msg[i].country + ", " + msg[i].releaseDate + ", " + msg[i].movieType));
+		kontener.appendChild(dane);
+		var opis = document.createElement("p");
+		opis.appendChild(document.createTextNode(msg[i].shortDescription));
+		kontener.appendChild(opis);
+		wiersze[i].appendChild(kontener);
+
+	}
+	console.log(wiersze);
+}
+
+
+
+
+
+
+
+
+
+
+
+function wyswietlListeFimow(nazwaFilmu, callback){
 	var xml = new XMLHttpRequest();
 	var adres = pobierzAdress();
-	xml.open("GET", "http://"+adres+"/list/"+nazwaFilmu, true);
+	// Jak bedzie dziaąc to do poprawy
+	xml.open("GET", "http://"+adres+"/list-test", true)//nazwaFilmu, true);
 	xml.onload = "json";
 	xml.onreadystatechange = function(){
-		console.log(xml.response);
+		if(this.readyState=== 4 && this.status=== 200)
+			callback(JSON.parse(xml.response));
 	};
 	xml.send();
 };
-
+// Poprawic
 function checkConnection() {
     var networkState = navigator.connection.type;
 
