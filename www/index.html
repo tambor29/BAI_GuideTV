@@ -15,6 +15,7 @@
 <body onload="init()">
 	<div data-role="page" id="padgeOne">
 
+
 		<div data-role="header">
 			<h1>Program TV</h1>
 			<form class="ui-filterable">
@@ -30,32 +31,46 @@
 			<div id="result">
 				<ul>
 					<li class="wiersz">
-						<div id="movie1" class="filmStyle">
-
-
-
-						</div>
+						<a href="#pageTwo">
+							<div id="movie1" class="filmStyle">
+							</div>
+						</a>
 					</li>
 					<li class="wiersz">
-						<div id="movie2" class="filmStyle">
-
-
-						</div>
+						<a href="#pageTwo">
+							<div id="movie2" class="filmStyle">
+							</div>
+						</a>
 					</li>
 					<li class="wiersz">
-						<div id="movie3" class="filmStyle">
-
-
-						</div>
+						<a href="#pageTwo">
+							<div id="movie3" class="filmStyle">
+							</div>
+						</a>
 					</li>
 				</ul>
 			</div>
 
 		</div>
-
-
-
 	</div>
+
+	<div data-role="page" id="padgeTwo">
+		<div data-role="header">
+			<h1>Program TV</h1>
+			<div id="secondPage">
+				<h2 id="spTitle"> </h2>
+				<h5 id="spInfo"></h5>
+				<img id="picture"></img>
+				<h3>Opis</h3>
+				<p id="spDescription"></p>
+				<h3>Obsada</h3>
+				<ul id="actores"></ul>
+				<h3>Najbliższa Emisji</h3>
+				<img id="logo"></img>
+				<h6 id="emissionDate"></h6>
+				<input id="kalendarBtn" type="button" value="Dodaj przypomnienie">
+			</div>
+		</div>
 </body>
 
 </html>
