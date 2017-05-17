@@ -82,8 +82,10 @@ function wyswietlListeFimow(nazwaFilmu, callback){
 	xml.open("GET", "http://"+adres+"/list-test", true)//nazwaFilmu, true);
 	xml.onload = "json";
 	xml.onreadystatechange = function(){
-		if(this.readyState=== 4 && this.status=== 200)
+		if(this.readyState=== 4 && this.status=== 200){
+			alert(test);
 			callback(JSON.parse(xml.response));
+		}
 	};
 	xml.send();
 };
