@@ -1,11 +1,12 @@
 function init() {
 	document.addEventListener("deviceready",onDeviceReady, false);
-	prepareSearchBTN();
-	walidacjaAdresu();
+
 }
 
 function onDeviceReady() {
 	navigator.notification.beep(1);
+	prepareSearchBTN();
+	walidacjaAdresu();
 }
 
 function prepareSearchBTN() {
