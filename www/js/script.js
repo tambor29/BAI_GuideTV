@@ -76,7 +76,7 @@ function tmp(msg){
 
 
 function wyswietlListeFimow(nazwaFilmu, callback){
-	alert("testq");
+	// alert("testq");
 	var xml = new XMLHttpRequest();
 	var adres = pobierzAdress();
 	// Jak bedzie dziaąc to do poprawy
@@ -89,6 +89,7 @@ function wyswietlListeFimow(nazwaFilmu, callback){
 		}
 	};
 	xml.send();
+	alert(xml.status);
 };
 // Poprawic
 function checkConnection() {
