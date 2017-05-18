@@ -49,7 +49,8 @@ function pobierzListeFilmow() {
 }
 
 
-
+//####################################################
+// tutaj dodajemy elementy wyswietlajace sie po nacisnieciu guzika wyszukiwania
 function pokazListeFilmow(msg) {
   listaFilmow = msg;
   var wiersze = document.querySelectorAll(".filmStyle");
@@ -71,6 +72,8 @@ function pokazListeFilmow(msg) {
 
   }
 }
+
+//############################################################################
 
 function przyotujLinki() {
   var linki = document.querySelectorAll(".filmStyle");
@@ -98,19 +101,19 @@ function wstawDetale() {
     default:
   }
 	var tytul = document.querySelector("#spTitle").appendChild(document.createTextNode(listaFilmow[selectedButton].movieTitle));
-	document,querySelector("#spInfo").appendChild(document.createTextNode(listaFilmow[selectedButton].country + ", "  +listaFilmow[selectedButton].releaseDate +
+	document.querySelector("#spInfo").appendChild(document.createTextNode(listaFilmow[selectedButton].country + ", "  +listaFilmow[selectedButton].releaseDate +
 	" <br>Gatunek: " + listaFilmow[selectedButton].type + ", Czas trwania: " + details.duration + "<br> Reżyseria: " + details.director));
 	document.querySelector("#picture").setAttribute("src", listaFilmow[selectedButton].linkDoZdjecia);
-	document.querySelector("#spDescription").appendChild(document.createTextNode(details).longDescription);
+	document.querySelector("#spDescription").appendChild(document.createTextNode(details.longDescription));
 	var kontener = document.createDocumentFragment();
 	for (var i = 0; i < details.actors.length; i++) {
 		var element = document.createElement("li");
-		element.appendChild(document.createTextNod(details.actors[i]));
-		kontene.appendChild(element);
+		element.appendChild(document.createTextNode(details.actors[i]));
+		kontener.appendChild(element);
 	}
-	document.querySelector("actores").appendChild(kontener);
+	document.querySelector("#actores").appendChild(kontener);
 	document.querySelector("#logo").setAttribute("src", details.stationLogo);
-	document.querySelector("#emissionDate").appendChild(document.createTextNode(details.station + "  " + details.emissonDay + "." + details.emissonMonth + "." + details.emissionYear + "  " +
+	document.querySelector("#emissionDate").appendChild(document.createTextNode(details.station + "  " + details.emissionDay + "." + details.emissionMonth + "." + details.emissionYear + "  " +
 	 details.hour + ":" + details.minute  ))
 
 
@@ -125,7 +128,7 @@ function wstawDetale() {
 function pobierzDetale(callback) {
   var xml = new XMLHttpRequest();
   // Jak bedzie dziaąc to do poprawy
-  xml.open("GET", "http://" + adres + "/detale-test", true) //nazwaFilmu, true);
+  xml.open("GET", "http://" + adres + "/api/detale-test", true) //nazwaFilmu, true);
   xml.onload = "json";
   xml.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
@@ -143,7 +146,7 @@ function wyswietlListeFimow(nazwaFilmu, callback) {
   var xml = new XMLHttpRequest();
   adres = pobierzAdress();
   // Jak bedzie dziaąc to do poprawy
-  xml.open("GET", "http://" + adres + "/list-test", true) //nazwaFilmu, true);
+  xml.open("GET", "http://" + adres + "/api/list-test", true) //nazwaFilmu, true);
   xml.onload = "json";
   xml.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
