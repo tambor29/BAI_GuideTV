@@ -61,7 +61,10 @@ a:active {
 #jumbotron {
     background-image: url("../img/tapeta1.jpg");
     background-color: #cccccc;
-    min-height: 1000px;
+    background-size: cover;
+    min-height: 1500px;
+    padding-bottom: 250px;
+
 }
 
 
@@ -80,6 +83,19 @@ a:active {
 
  .footer {
   position: bottom;
-  height: 150px;
-  padding-top:20px;
+  height: 250px;
+  padding-bottom:100px;
+}
+
+#wyszukiwarkaKonter {
+  margin-top: 200px;
+}
+
+#result {
+  margin-top: 100px;
+}
+#movie1,
+#movie2,
+#movie3 {
+  margin-bottom: 70px;
 }

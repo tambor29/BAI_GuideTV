@@ -1,5 +1,5 @@
 var listaFilmow;
-var adres;
+var adres = '192.168.1.4:8080';
 var details;
 
 
@@ -50,11 +50,14 @@ function pokazListeFilmow(msg) {
     var zdjecie = document.createElement("img");
     var wiecej = document.createElement("div");
     wiecej.className = "filmWiecej";
-    zdjecie.setAttribute("src", msg[i].linkDoZdjecia);
-    kontener.appendChild(zdjecie);
-    var tytul = document.createElement("h3");
+    var tytul = document.createElement("h2");
     tytul.appendChild(document.createTextNode(msg[i].movieTitle));
     wiecej.appendChild(tytul);
+    zdjecie.setAttribute("src", msg[i].linkDoZdjecia);
+    zdjecie.className += 'img-rounded';
+    zdjecie.style.width = '400px';
+    zdjecie.style.height = '200px';
+    kontener.appendChild(zdjecie);
     var dane = document.createElement("h5");
     dane.appendChild(document.createTextNode(msg[i].country + ", " + msg[i].releaseDate + ", " + msg[i].movieType));
     wiecej.appendChild(dane);
