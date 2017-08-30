@@ -6,8 +6,8 @@ var details;
 function init() {
   document.addEventListener("deviceready", onDeviceReady, false);
   prepareSearchBTN();
-  walidacjaAdresu();
   przyotujLinki();
+  przygotujUstawienia();
 }
 
 function onDeviceReady() {
@@ -15,31 +15,21 @@ function onDeviceReady() {
 
 }
 
+// ustawienie adresu servera
+function przygotujUstawienia(){
+  $('#ustawienia').on('click', function(){
+    adres =   window.prompt('Please enter server address');
+  })
+};
+// koniec ustawiania adresu servera
+
+
 function prepareSearchBTN() {
   document.querySelector("#searchButton").addEventListener("click", function() {
-    pobierzAdress();
-    // var zmiena=checkConnection();
     pobierzListeFilmow();
   })
 }
 
-function pobierzAdress() {
-  var adres = document.querySelector("#settings").value;
-  if (adres == "" || adres === "undefined") {
-    alert("Brak adresu");
-  }
-  return adres;
-}
-
-function walidacjaAdresu() {
-  document.querySelector("#settings").addEventListener("blur", function() {
-    var reg = new RegExp("[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\:[0-9]+");
-    if (!reg.test(this.value)) {
-      alert("Niepoprawny adres");
-    }
-  })
-
-}
 
 function pobierzListeFilmow() {
   var nazwaFilmu = document.querySelector("#myFilter").value;
@@ -48,31 +38,35 @@ function pobierzListeFilmow() {
 
 }
 
-
 //####################################################
+
 // tutaj dodajemy elementy wyswietlajace sie po nacisnieciu guzika wyszukiwania
 function pokazListeFilmow(msg) {
   listaFilmow = msg;
   var wiersze = document.querySelectorAll(".filmStyle");
+  $('#result').addClass("active");
   for (var i = 0; i < wiersze.length; i++) {
     var kontener = document.createDocumentFragment();
     var zdjecie = document.createElement("img");
+    var wiecej = document.createElement("div");
+    wiecej.className = "filmWiecej";
     zdjecie.setAttribute("src", msg[i].linkDoZdjecia);
     kontener.appendChild(zdjecie);
     var tytul = document.createElement("h3");
     tytul.appendChild(document.createTextNode(msg[i].movieTitle));
-    kontener.appendChild(tytul);
+    wiecej.appendChild(tytul);
     var dane = document.createElement("h5");
     dane.appendChild(document.createTextNode(msg[i].country + ", " + msg[i].releaseDate + ", " + msg[i].movieType));
-    kontener.appendChild(dane);
+    wiecej.appendChild(dane);
     var opis = document.createElement("p");
     opis.appendChild(document.createTextNode(msg[i].shortDescription));
-    kontener.appendChild(opis);
-    wiersze[i].appendChild(kontener);
+    wiecej.appendChild(opis);
 
+    kontener.appendChild(wiecej)
+    wiersze[i].textContent = "";
+    wiersze[i].appendChild(kontener);
   }
 }
-
 //############################################################################
 
 function przyotujLinki() {
@@ -101,8 +95,11 @@ function wstawDetale() {
     default:
   }
 	var tytul = document.querySelector("#spTitle").appendChild(document.createTextNode(listaFilmow[selectedButton].movieTitle));
-	document.querySelector("#spInfo").appendChild(document.createTextNode(listaFilmow[selectedButton].country + ", "  +listaFilmow[selectedButton].releaseDate +
-	" <br>Gatunek: " + listaFilmow[selectedButton].type + ", Czas trwania: " + details.duration + "<br> Reżyseria: " + details.director));
+	document.querySelector("#spInfo").appendChild(document.createTextNode(listaFilmow[selectedButton].country + ", "  +listaFilmow[selectedButton].releaseDate))
+  document.querySelector("#spInfo").appendChild(document.createElement('br'));
+  document.querySelector("#spInfo").appendChild(document.createTextNode("Gatunek: " + listaFilmow[selectedButton].movieType + ", Czas trwania: " + details.duration))
+  document.querySelector("#spInfo").appendChild(document.createElement('br'));
+  document.querySelector("#spInfo").appendChild(document.createTextNode("Reżyseria: " + details.director))
 	document.querySelector("#picture").setAttribute("src", listaFilmow[selectedButton].linkDoZdjecia);
 	document.querySelector("#spDescription").appendChild(document.createTextNode(details.longDescription));
 	var kontener = document.createDocumentFragment();
@@ -115,12 +112,6 @@ function wstawDetale() {
 	document.querySelector("#logo").setAttribute("src", details.stationLogo);
 	document.querySelector("#emissionDate").appendChild(document.createTextNode(details.station + "  " + details.emissionDay + "." + details.emissionMonth + "." + details.emissionYear + "  " +
 	 details.hour + ":" + details.minute  ))
-
-
-
-
-
-
 
 
 }
@@ -144,9 +135,8 @@ function pobierzDetale(callback) {
 
 function wyswietlListeFimow(nazwaFilmu, callback) {
   var xml = new XMLHttpRequest();
-  adres = pobierzAdress();
   // Jak bedzie dziaąc to do poprawy
-  xml.open("GET", "http://" + adres + "/api/list-test", true) //nazwaFilmu, true);
+  xml.open("GET", "http://" + adres + "/list-test", true) //nazwaFilmu, true);
   xml.onload = "json";
   xml.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {

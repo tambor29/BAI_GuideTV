@@ -1,20 +1,85 @@
 html,
 ul {
-  list-style-type: none;
+    list-style-type: none;
 }
+
 a:link {
-  text-decoration: none;
-    color:  black;
-}
-a:visited {
-  text-decoration: none;
-    color:  black;
-}
-a:hover {
-  text-decoration: none;
-    color:  black;
-}
-a:active {
-  text-decoration: none;
+    text-decoration: none;
+    text-shadow: none;
     color: black;
+}
+
+a:visited {
+    text-decoration: none;
+    text-shadow: none;
+    color: black;
+}
+
+a:hover {
+    text-decoration: none;
+    text-shadow: none;
+    color: black;
+}
+
+a:active {
+    text-decoration: none;
+    text-shadow: none;
+    color: black;
+}
+#custom-search-input{
+    padding: 3px;
+    border: solid 1px #E4E4E4;
+    border-radius: 6px;
+    background-color: #fff;
+}
+
+#custom-search-input input{
+    border: 0;
+    box-shadow: none;
+}
+
+#custom-search-input button{
+    margin: 2px 0 0 0;
+    background: none;
+    box-shadow: none;
+    border: 0;
+    color: #666666;
+    padding: 0 8px 0 10px;
+    border-left: solid 1px #ccc;
+}
+
+#custom-search-input button:hover{
+    border: 0;
+    box-shadow: none;
+    border-left: solid 1px #ccc;
+}
+
+#custom-search-input .glyphicon-search{
+    font-size: 23px;
+}
+
+#jumbotron {
+    background-image: url("../img/tapeta1.jpg");
+    background-color: #cccccc;
+    min-height: 1000px;
+}
+
+
+ #social-fb:hover {
+     color: #3B5998;
+ }
+ #social-tw:hover {
+     color: #4099FF;
+ }
+ #social-gp:hover {
+     color: #d34836;
+ }
+ #social-em:hover {
+     color: #f39c12;
+ }
+
+ .footer {
+  position: bottom;
+  height: 150px;
+  padding-top:20px;
 }
