@@ -1,6 +1,8 @@
 var listaFilmow;
 var adres = '192.168.1.4:8080';
 var details;
+var selectedButton;
+var st={};
 
 
 function init() {
@@ -8,6 +10,8 @@ function init() {
   prepareSearchBTN();
   przyotujLinki();
   przygotujUstawienia();
+  przygotujHome();
+  przygotujHistory();
 }
 
 function onDeviceReady() {
@@ -15,19 +19,72 @@ function onDeviceReady() {
 
 }
 
+function przygotujHistory(){
+  $('#history').on("click",  function(){
+    $('#wyszukiwarkaKonter').hide();
+    $('#result').hide();
+    $('#naglowek').hide();
+    var ostatni = localStorage.getItem('ostatni');
+    if(ostatni != null){
+      var tytul = document.querySelector("#spTitle").appendChild(document.createTextNode(ostatni.movieTitle));
+    	document.querySelector("#spInfo").appendChild(document.createTextNode(ostatni.country + ", "  +ostatni.releaseDate))
+      document.querySelector("#spInfo").appendChild(document.createElement('br'));
+      document.querySelector("#spInfo").appendChild(document.createTextNode("Gatunek: " + ostatni.movieType + ", Czas trwania: " + ostatni.duration))
+      document.querySelector("#spInfo").appendChild(document.createElement('br'));
+      document.querySelector("#spInfo").appendChild(document.createTextNode("Reżyseria: " + ostatni.director))
+      document.querySelector("#opis").appendChild(document.createTextNode("Opis:"))
+    	document.querySelector("#picture").setAttribute("src", ostatni.linkDoZdjecia);
+    	document.querySelector("#spDescription").appendChild(document.createTextNode(ostatni.longDescription));
+      document.querySelector("#obsada").appendChild(document.createTextNode("Obsada:"))
+    	var kontener = document.createDocumentFragment();
+    	for (var i = 0; i < details.actors.length; i++) {
+    		var element = document.createElement("li");
+    		element.appendChild(document.createTextNode(ostatni.actors[i]));
+    		kontener.appendChild(element);
+    	}
+    	document.querySelector("#actores").appendChild(kontener);
+      if(details.emissionDay != null){
+        var logo=document.querySelector("#logo");
+    	   logo.setAttribute("src", details.stationLogo);
+    	   document.querySelector("#emissionDate").appendChild(document.createTextNode(details.station + "  " + details.emissionDay + "." + details.emissionMonth + "." + details.emissionYear + "  " +
+    	   details.hour + ":" + details.minute  ))
+       }
+    }
+  })
+}
+
+// przygotowanie guzika home
+ function przygotujHome(){
+  $("#glowna").on('click', function(){
+    $('#wyszukiwarkaKonter').show();
+    $('#result').show();
+    $('#naglowek').show();
+    $('#spTitle').empty();
+    $('#spInfo').empty();
+    $('#opis').empty();
+    $('#picture').attr("src", null);
+    $('#spDescription').empty();
+    $('#obsada').empty();
+    $('#actores').empty();
+    $('#emissionDate').empty();
+    $('#logo').attr("src", null);
+    $('#calendar').hide();
+  })
+};
+
 // ustawienie adresu servera
 function przygotujUstawienia(){
   $('#ustawienia').on('click', function(){
-    adres =   window.prompt('Please enter server address');
+    adres =window.prompt('Please enter server address');
   })
 };
 // koniec ustawiania adresu servera
-
 
 function prepareSearchBTN() {
   document.querySelector("#searchButton").addEventListener("click", function() {
     pobierzListeFilmow();
   })
+  $('#calendar').hide();
 }
 
 
@@ -35,6 +92,7 @@ function pobierzListeFilmow() {
   var nazwaFilmu = document.querySelector("#myFilter").value;
   var zakodawanaNazwaFilmu = encodeURI(nazwaFilmu);
   wyswietlListeFimow(nazwaFilmu, pokazListeFilmow);
+
 
 }
 
@@ -56,7 +114,7 @@ function pokazListeFilmow(msg) {
     zdjecie.setAttribute("src", msg[i].linkDoZdjecia);
     zdjecie.className += 'img-rounded';
     zdjecie.style.width = '400px';
-    zdjecie.style.height = '200px';
+    zdjecie.style.height = '300px';
     kontener.appendChild(zdjecie);
     var dane = document.createElement("h5");
     dane.appendChild(document.createTextNode(msg[i].country + ", " + msg[i].releaseDate + ", " + msg[i].movieType));
@@ -74,37 +132,47 @@ function pokazListeFilmow(msg) {
 
 function przyotujLinki() {
   var linki = document.querySelectorAll(".filmStyle");
-  for (var i = 0; i < linki.length; i++) {
-    linki[i].addEventListener("click", function() {
-      pobierzDetale(wstawDetale.bind(this));
-    });
-  }
+  linki[0].addEventListener("click", function() {
+    pobierzDetale(0, wstawDetale);
+  });
+  linki[1].addEventListener("click", function() {
+    pobierzDetale(1, wstawDetale);
+  });
+  linki[2].addEventListener("click", function() {
+    pobierzDetale(2, wstawDetale());
+  });
 
 }
 
-function wstawDetale() {
-  var button = this.id;
-  var selectedButton;
-  switch (button) {
-    case "movie1":
-      selectedButton = 0;
-      break;
-    case "movie2":
-      selectedButton = 1;
-      break;
-    case "movie3":
-      selectedButton = 2;
-      break;
-    default:
-  }
+function wstawDetale(details) {
+  injectDetailsTemplate();
+  st.movieTitle = listaFilmow[selectedButton].movieTitle;
+  st.country = listaFilmow[selectedButton].country;
+  st.releaseDate = listaFilmow[selectedButton].releaseDate;
+  st.movieType = listaFilmow[selectedButton].movieType;
+  st.duration =details.duration;
+  st.duration = details.director;
+  st.linkDoZdjecia = listaFilmow[selectedButton].linkDoZdjecia;
+  st.longDescription = details.longDescription;
+  st.actors = details.actors;
+  st.stationLogo=details.stationLogo;
+  st.station = details.station;
+  st.emissionDay =details.emissionDay;
+  st.emissionMonth = details.emissionMonth;
+  st.emissionYear = details.emissionYear;
+  st.hour = details.hour;
+  st.minute = details.minute;
+  console.log(st.movieTitle);
 	var tytul = document.querySelector("#spTitle").appendChild(document.createTextNode(listaFilmow[selectedButton].movieTitle));
 	document.querySelector("#spInfo").appendChild(document.createTextNode(listaFilmow[selectedButton].country + ", "  +listaFilmow[selectedButton].releaseDate))
   document.querySelector("#spInfo").appendChild(document.createElement('br'));
   document.querySelector("#spInfo").appendChild(document.createTextNode("Gatunek: " + listaFilmow[selectedButton].movieType + ", Czas trwania: " + details.duration))
   document.querySelector("#spInfo").appendChild(document.createElement('br'));
   document.querySelector("#spInfo").appendChild(document.createTextNode("Reżyseria: " + details.director))
+  document.querySelector("#opis").appendChild(document.createTextNode("Opis:"))
 	document.querySelector("#picture").setAttribute("src", listaFilmow[selectedButton].linkDoZdjecia);
 	document.querySelector("#spDescription").appendChild(document.createTextNode(details.longDescription));
+  document.querySelector("#obsada").appendChild(document.createTextNode("Obsada:"))
 	var kontener = document.createDocumentFragment();
 	for (var i = 0; i < details.actors.length; i++) {
 		var element = document.createElement("li");
@@ -112,23 +180,27 @@ function wstawDetale() {
 		kontener.appendChild(element);
 	}
 	document.querySelector("#actores").appendChild(kontener);
-	document.querySelector("#logo").setAttribute("src", details.stationLogo);
-	document.querySelector("#emissionDate").appendChild(document.createTextNode(details.station + "  " + details.emissionDay + "." + details.emissionMonth + "." + details.emissionYear + "  " +
-	 details.hour + ":" + details.minute  ))
+  if(details.emissionDay != null){
+    document.querySelector("#emisja").appendChild(document.createTextNode("Emisja:"))
+    var logo=document.querySelector("#logo");
+	   logo.setAttribute("src", details.stationLogo);
+	   document.querySelector("#emissionDate").appendChild(document.createTextNode(details.station + "  " + details.emissionDay + "." + details.emissionMonth + "." + details.emissionYear + "  " +
+	   details.hour + ":" + details.minute  ))
+     $('#calendar').show();
+   }
 
 
 }
 
-function pobierzDetale(callback) {
+function pobierzDetale(numer, callback) {
   var xml = new XMLHttpRequest();
-  // Jak bedzie dziaąc to do poprawy
-  xml.open("GET", "http://" + adres + "/api/detale-test", true) //nazwaFilmu, true);
+  selectedButton = numer;
+  xml.open("GET", "http://" + adres + "/details"+listaFilmow[numer].refToMoreInfo, true); //nazwaFilmu, true);
   xml.onload = "json";
   xml.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
 			details=JSON.parse(xml.response);
       callback(JSON.parse(xml.response));
-
     }
   };
   xml.send();
@@ -138,8 +210,7 @@ function pobierzDetale(callback) {
 
 function wyswietlListeFimow(nazwaFilmu, callback) {
   var xml = new XMLHttpRequest();
-  // Jak bedzie dziaąc to do poprawy
-  xml.open("GET", "http://" + adres + "/list-test", true) //nazwaFilmu, true);
+  xml.open("GET", "http://" + adres + "/list/" +nazwaFilmu, true) //nazwaFilmu, true);
   xml.onload = "json";
   xml.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
@@ -168,4 +239,19 @@ function checkConnection() {
     return false;
   }
   return true;
+}
+
+function injectDetailsTemplate(){
+  $('#wyszukiwarkaKonter').hide();
+  $('#result').hide();
+  $('#naglowek').hide();
+}
+
+function saveToCalendar(){
+
+  saveToDataStorage();
+}
+
+function saveToDataStorage(){
+  localStorage.setItem('last', JSON.stringify(st));
 }

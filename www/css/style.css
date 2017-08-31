@@ -99,3 +99,20 @@ a:active {
 #movie3 {
   margin-bottom: 70px;
 }
+
+/*#kalendarBtn {
+  visibility: hidden;
+}*/
+
+#secondPage {
+  margin-top: 50px;
+}
+#opis,
+#obsada,
+#emisja {
+  font-weight: bold;
+}
+
+li {
+  font-size: 20px;
+}
