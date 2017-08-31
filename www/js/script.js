@@ -3,6 +3,7 @@ var adres = '192.168.1.4:8080';
 var details;
 var selectedButton;
 var st={};
+var ostatni;
 
 
 function init() {
@@ -11,8 +12,8 @@ function init() {
   przyotujLinki();
   przygotujUstawienia();
   przygotujHome();
-  przygotujHistory();
-  przygotujPrzypomnienie()
+  przygotujHistory(dodaj);
+  // przygotujPrzypomnienie()
 }
 
 function onDeviceReady() {
@@ -24,38 +25,66 @@ function przygotujPrzypomnienie(){
   $("#kalendarBtn").on('click', saveToCalendar);
 }
 
-function przygotujHistory(){
+function przygotujHistory(callback){
   $('#history').on("click",  function(){
-    $('#wyszukiwarkaKonter').hide();
-    $('#result').hide();
-    $('#naglowek').hide();
-    var ostatni = localStorage.getItem('ostatni');
-    if(ostatni != null){
-      var tytul = document.querySelector("#spTitle").appendChild(document.createTextNode(ostatni.movieTitle));
-    	document.querySelector("#spInfo").appendChild(document.createTextNode(ostatni.country + ", "  +ostatni.releaseDate))
-      document.querySelector("#spInfo").appendChild(document.createElement('br'));
-      document.querySelector("#spInfo").appendChild(document.createTextNode("Gatunek: " + ostatni.movieType + ", Czas trwania: " + ostatni.duration))
-      document.querySelector("#spInfo").appendChild(document.createElement('br'));
-      document.querySelector("#spInfo").appendChild(document.createTextNode("Reżyseria: " + ostatni.director))
-      document.querySelector("#opis").appendChild(document.createTextNode("Opis:"))
-    	document.querySelector("#picture").setAttribute("src", ostatni.linkDoZdjecia);
-    	document.querySelector("#spDescription").appendChild(document.createTextNode(ostatni.longDescription));
-      document.querySelector("#obsada").appendChild(document.createTextNode("Obsada:"))
-    	var kontener = document.createDocumentFragment();
-    	for (var i = 0; i < details.actors.length; i++) {
-    		var element = document.createElement("li");
-    		element.appendChild(document.createTextNode(ostatni.actors[i]));
-    		kontener.appendChild(element);
-    	}
-    	document.querySelector("#actores").appendChild(kontener);
-      if(details.emissionDay != null){
-        var logo=document.querySelector("#logo");
-    	   logo.setAttribute("src", details.stationLogo);
-    	   document.querySelector("#emissionDate").appendChild(document.createTextNode(details.station + "  " + details.emissionDay + "." + details.emissionMonth + "." + details.emissionYear + "  " +
-    	   details.hour + ":" + details.minute  ))
-       }
-    }
+    ostatni = JSON.parse(localStorage.getItem('last'));
+    console.log(ostatni);
+    callback(ostatni);
+    // if(ostatni != null){
+    //   var tytul = document.querySelector("#spTitle").appendChild(document.createTextNode(ostatni.movieTitle));
+    // 	document.querySelector("#spInfo").appendChild(document.createTextNode(ostatni.country + ", "  +ostatni.releaseDate))
+    //   document.querySelector("#spInfo").appendChild(document.createElement('br'));
+    //   document.querySelector("#spInfo").appendChild(document.createTextNode("Gatunek: " + ostatni.movieType + ", Czas trwania: " + ostatni.duration))
+    //   document.querySelector("#spInfo").appendChild(document.createElement('br'));
+    //   document.querySelector("#spInfo").appendChild(document.createTextNode("Reżyseria: " + ostatni.director))
+    //   document.querySelector("#opis").appendChild(document.createTextNode("Opis:"))
+    // 	document.querySelector("#picture").setAttribute("src", ostatni.linkDoZdjecia);
+    // 	document.querySelector("#spDescription").appendChild(document.createTextNode(ostatni.longDescription));
+    //   document.querySelector("#obsada").appendChild(document.createTextNode("Obsada:"))
+    //   if(details.emissionDay != null){
+    //     var logo=document.querySelector("#logo");
+    // 	   logo.setAttribute("src", details.stationLogo);
+    // 	   document.querySelector("#emissionDate").appendChild(document.createTextNode(details.station + "  " + details.emissionDay + "." + details.emissionMonth + "." + details.emissionYear + "  " +
+    // 	   details.hour + ":" + details.minute  ))
+    //    }
+    // }
   })
+}
+
+function dodaj (ostatni){
+
+  $('#wyszukiwarkaKonter').hide();
+  $('#result').hide();
+  $('#naglowek').hide();
+  $('#spTitle').empty();
+  $('#spInfo').empty();
+  $('#opis').empty();
+  $('#picture').attr("src", null);
+  $('#spDescription').empty();
+  $('#obsada').empty();
+  $('#actores').empty();
+  $('#emissionDate').empty();
+  $('#emisja').empty();
+  $('#logo').attr("src", null);
+  $('#calendar').hide();
+  console.log(ostatni.longDescription)
+  if(ostatni !== null){
+    var tytul = document.querySelector("#spTitle").appendChild(document.createTextNode(ostatni.movieTitle));
+    document.querySelector("#spInfo").appendChild(document.createTextNode(ostatni.country + ", "  +ostatni.releaseDate))
+    document.querySelector("#spInfo").appendChild(document.createElement('br'));
+    document.querySelector("#spInfo").appendChild(document.createTextNode("Gatunek: " + ostatni.movieType + ", Czas trwania: " + ostatni.duration))
+    document.querySelector("#spInfo").appendChild(document.createElement('br'));
+    document.querySelector("#spInfo").appendChild(document.createTextNode("Reżyseria: " + ostatni.director))
+    document.querySelector("#opis").appendChild(document.createTextNode("Opis:"))
+    document.querySelector("#picture").setAttribute("src", ostatni.linkDoZdjecia);
+    document.querySelector("#spDescription").appendChild(document.createTextNode(ostatni.longDescription));
+    if(details.emissionDay != null){
+      var logo=document.querySelector("#logo");
+       logo.setAttribute("src", details.stationLogo);
+       document.querySelector("#emissionDate").appendChild(document.createTextNode(details.station + "  " + details.emissionDay + "." + details.emissionMonth + "." + details.emissionYear + "  " +
+       details.hour + ":" + details.minute  ))
+     }
+  }
 }
 
 // przygotowanie guzika home
@@ -253,18 +282,43 @@ function injectDetailsTemplate(){
   $('#naglowek').hide();
 }
 
-function saveToCalendar(){
-  var startDate = new Date(st.emissionYear,st.emissionMonth-1,st.emissionDay,st.hour,st.minute-15,0,0,0); // beware: month 0 = january, 11 = december
-  var endDate = new Date(st.emissionYear,st.emissionMonth-1,st.emissionDay,st.hour+1,st.minute,0,0,0);
-  var title = "Transmisja "+ st.movieTitle +" na kanale "+ st.station;
-  var eventLocation = "Home";
-  var notes = "Milego seansu";
-  var success = function(message) { alert("Przypomnienie zostalo dodane"); };
-  var error = function(message) { alert("Blad" + message); };
-  window.plugins.calendar.createEvent(title,eventLocation,notes,startDate,endDate,success,error);
-  saveToDataStorage();
-}
+// function saveToCalendar(){
+//   // var startDate = new Date(st.emissionYear,st.emissionMonth-1,st.emissionDay,st.hour,st.minute-15,0,0,0); // beware: month 0 = january, 11 = december
+//   // var endDate = new Date(st.emissionYear,st.emissionMonth-1,st.emissionDay,st.hour+1,st.minute,0,0,0);
+//   var startDate = new Date(2017, 8, 10, 20, 10)
+//   var endDate = new Date(2017, 8, 10, 22, 10)
+//   var title = "Transmisja "+ st.movieTitle +" na kanale "+ st.station;
+//   var eventLocation = "Home";
+//   var notes = "Milego seansu";
+//   var success = function(message) { alert("Przypomnienie zostalo dodane"); };
+//   var error = function(message) { alert("Blad" + message); };
+//   saveToDataStorage();
+//   window.plugins.calendar.createEvent("tytul","home","Milego seansu",startDate,endDate,success,error);
+//
+// }
+//
+// function saveToDataStorage(){
+//   localStorage.setItem('last', JSON.stringify(st));
+// }
 
-function saveToDataStorage(){
-  localStorage.setItem('last', JSON.stringify(st));
-}
+// ----------------------------------
+$('body').on('click', '#kalendarBtn', function() {
+
+    var calOptions = window.plugins.calendar.getCalendarOptions(); // grab the defaults
+    calOptions.firstReminderMinutes = 10;
+    calOptions.secondReminderMinutes = 5;
+
+    var startDate = new Date(2017, 8, 10, 20, 10); // beware: month 0 = january, 11 = december
+    var endDate = new Date(2017, 8, 10, 22, 10);
+    var title = "tytul"
+    var eventLocation = "lokacja";
+    var notes = "tvn sherlock holmes";
+    var success = function(message) {
+        alert("Success: Reminder set correctly");
+    };
+    var error = function(message) {
+        alert("Error: something went wrong");
+    };
+    window.plugins.calendar.createEventWithOptions(title, eventLocation, notes, startDate, endDate, calOptions, success, error);
+    localStorage.setItem('last', JSON.stringify(st));
+});
