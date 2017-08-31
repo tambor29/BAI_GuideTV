@@ -302,7 +302,7 @@ function injectDetailsTemplate(){
 // }
 
 // ----------------------------------
-$('body').on('click', '#calendar', function() {
+$('body').on('click', '#kalendarBtn', function() {
 
     var calOptions = window.plugins.calendar.getCalendarOptions();
     calOptions.firstReminderMinutes = 10;
