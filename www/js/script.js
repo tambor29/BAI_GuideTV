@@ -12,11 +12,16 @@ function init() {
   przygotujUstawienia();
   przygotujHome();
   przygotujHistory();
+  przygotujPrzypomnienie()
 }
 
 function onDeviceReady() {
   navigator.notification.beep(1);
 
+}
+
+function przygotujPrzypomnienie(){
+  $("#kalendarBtn").on('click', saveToCalendar);
 }
 
 function przygotujHistory(){
@@ -67,6 +72,7 @@ function przygotujHistory(){
     $('#obsada').empty();
     $('#actores').empty();
     $('#emissionDate').empty();
+    $('#emisja').empty();
     $('#logo').attr("src", null);
     $('#calendar').hide();
   })
@@ -248,7 +254,14 @@ function injectDetailsTemplate(){
 }
 
 function saveToCalendar(){
-
+  var startDate = new Date(st.emissionYear,st.emissionMonth-1,st.emissionDay,st.hour,st.minute-15,0,0,0); // beware: month 0 = january, 11 = december
+  var endDate = new Date(st.emissionYear,st.emissionMonth-1,st.emissionDay,st.hour+1,st.minute,0,0,0);
+  var title = "Transmisja "+ st.movieTitle +" na kanale "+ st.station;
+  var eventLocation = "Home";
+  var notes = "Milego seansu";
+  var success = function(message) { alert("Przypomnienie zostalo dodane"); };
+  var error = function(message) { alert("Blad" + message); };
+  window.plugins.calendar.createEvent(title,eventLocation,notes,startDate,endDate,success,error);
   saveToDataStorage();
 }
 

@@ -18,5 +18,9 @@
   <plugin name="cordova-plugin-calendar" spec="https://github.com/EddyVerbruggen/Calendar-PhoneGap-Plugin.git" />
 	<plugin name="cordova-plugin-splashscreen" />
 	<plugin name="cordova-plugin-x-socialsharing" />
+  <platform name="android">
+        <splash src="www/img/splash.jpg"/>
+			  <icon src="www/img/icon.jpg" />
+  </platform>
 
 </widget>
