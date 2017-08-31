@@ -29,4 +29,4 @@ Aplikacja również w swoim działaniu pozwala na dodawaniu przypomnień do kale
 ## Dane autorów
 * Arkadiusz Blechesien
 
-* Damian Gajda
+* Damian Gajda 
