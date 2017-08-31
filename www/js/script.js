@@ -13,7 +13,6 @@ function init() {
   przygotujUstawienia();
   przygotujHome();
   przygotujHistory(dodaj);
-  // przygotujPrzypomnienie()
 }
 
 function onDeviceReady() {
@@ -21,36 +20,16 @@ function onDeviceReady() {
 
 }
 
-function przygotujPrzypomnienie(){
-  $("#kalendarBtn").on('click', saveToCalendar);
-}
 
 function przygotujHistory(callback){
   $('#history').on("click",  function(){
     ostatni = JSON.parse(localStorage.getItem('last'));
     console.log(ostatni);
     callback(ostatni);
-    // if(ostatni != null){
-    //   var tytul = document.querySelector("#spTitle").appendChild(document.createTextNode(ostatni.movieTitle));
-    // 	document.querySelector("#spInfo").appendChild(document.createTextNode(ostatni.country + ", "  +ostatni.releaseDate))
-    //   document.querySelector("#spInfo").appendChild(document.createElement('br'));
-    //   document.querySelector("#spInfo").appendChild(document.createTextNode("Gatunek: " + ostatni.movieType + ", Czas trwania: " + ostatni.duration))
-    //   document.querySelector("#spInfo").appendChild(document.createElement('br'));
-    //   document.querySelector("#spInfo").appendChild(document.createTextNode("Reżyseria: " + ostatni.director))
-    //   document.querySelector("#opis").appendChild(document.createTextNode("Opis:"))
-    // 	document.querySelector("#picture").setAttribute("src", ostatni.linkDoZdjecia);
-    // 	document.querySelector("#spDescription").appendChild(document.createTextNode(ostatni.longDescription));
-    //   document.querySelector("#obsada").appendChild(document.createTextNode("Obsada:"))
-    //   if(details.emissionDay != null){
-    //     var logo=document.querySelector("#logo");
-    // 	   logo.setAttribute("src", details.stationLogo);
-    // 	   document.querySelector("#emissionDate").appendChild(document.createTextNode(details.station + "  " + details.emissionDay + "." + details.emissionMonth + "." + details.emissionYear + "  " +
-    // 	   details.hour + ":" + details.minute  ))
-    //    }
-    // }
   })
 }
 
+// dodanie zawartosci historii
 function dodaj (ostatni){
 
   $('#wyszukiwarkaKonter').hide();
@@ -148,7 +127,7 @@ function pokazListeFilmow(msg) {
     wiecej.appendChild(tytul);
     zdjecie.setAttribute("src", msg[i].linkDoZdjecia);
     zdjecie.className += 'img-rounded';
-    zdjecie.style.width = '400px';
+    zdjecie.style.width = '300px';
     zdjecie.style.height = '300px';
     kontener.appendChild(zdjecie);
     var dane = document.createElement("h5");
@@ -282,37 +261,19 @@ function injectDetailsTemplate(){
   $('#naglowek').hide();
 }
 
-// function saveToCalendar(){
-//   // var startDate = new Date(st.emissionYear,st.emissionMonth-1,st.emissionDay,st.hour,st.minute-15,0,0,0); // beware: month 0 = january, 11 = december
-//   // var endDate = new Date(st.emissionYear,st.emissionMonth-1,st.emissionDay,st.hour+1,st.minute,0,0,0);
-//   var startDate = new Date(2017, 8, 10, 20, 10)
-//   var endDate = new Date(2017, 8, 10, 22, 10)
-//   var title = "Transmisja "+ st.movieTitle +" na kanale "+ st.station;
-//   var eventLocation = "Home";
-//   var notes = "Milego seansu";
-//   var success = function(message) { alert("Przypomnienie zostalo dodane"); };
-//   var error = function(message) { alert("Blad" + message); };
-//   saveToDataStorage();
-//   window.plugins.calendar.createEvent("tytul","home","Milego seansu",startDate,endDate,success,error);
-//
-// }
-//
-// function saveToDataStorage(){
-//   localStorage.setItem('last', JSON.stringify(st));
-// }
 
-// ----------------------------------
+// dodawanie przypomnienia do kalendarza
 $('body').on('click', '#kalendarBtn', function() {
 
+    var startDate = new Date(st.emissionYear,st.emissionMonth-1,st.emissionDay,st.hour,st.minute);
+    var startDate = new Date(st.emissionYear,st.emissionMonth-1,st.emissionDay,st.hour +1,st.minute);
+    var title = "Transmisja "+ st.movieTitle +" na kanale "+ st.station;
+    var eventLocation = "Home";
+    var notes = "Milego seansu";
     var calOptions = window.plugins.calendar.getCalendarOptions();
     calOptions.firstReminderMinutes = 10;
     calOptions.secondReminderMinutes = 5;
 
-    var startDate = new Date(2017, 8, 10, 20, 10);
-    var endDate = new Date(2017, 8, 10, 22, 10);
-    var title = "tytul"
-    var eventLocation = "lokacja";
-    var notes = "tvn sherlock holmes";
     var success = function(message) {
         alert("Success: Reminder set correctly");
     };
@@ -321,7 +282,6 @@ $('body').on('click', '#kalendarBtn', function() {
     };
 
     alert ("dodano do kalendarza");
-    // $(this).hide();
     window.plugins.calendar.createEventWithOptions(title, eventLocation, notes, startDate, endDate, calOptions, success, error);
     localStorage.setItem('last', JSON.stringify(st));
 
