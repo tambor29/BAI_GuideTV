@@ -302,13 +302,13 @@ function injectDetailsTemplate(){
 // }
 
 // ----------------------------------
-$('body').on('click', '#kalendarBtn', function() {
+$('body').on('click', '#calendar', function() {
 
-    var calOptions = window.plugins.calendar.getCalendarOptions(); // grab the defaults
+    var calOptions = window.plugins.calendar.getCalendarOptions();
     calOptions.firstReminderMinutes = 10;
     calOptions.secondReminderMinutes = 5;
 
-    var startDate = new Date(2017, 8, 10, 20, 10); // beware: month 0 = january, 11 = december
+    var startDate = new Date(2017, 8, 10, 20, 10);
     var endDate = new Date(2017, 8, 10, 22, 10);
     var title = "tytul"
     var eventLocation = "lokacja";
@@ -319,6 +319,10 @@ $('body').on('click', '#kalendarBtn', function() {
     var error = function(message) {
         alert("Error: something went wrong");
     };
+
+    alert ("dodano do kalendarza");
+    // $(this).hide();
     window.plugins.calendar.createEventWithOptions(title, eventLocation, notes, startDate, endDate, calOptions, success, error);
     localStorage.setItem('last', JSON.stringify(st));
+
 });
