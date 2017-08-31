@@ -29,7 +29,22 @@ function przygotujHistory(){
     $('#wyszukiwarkaKonter').hide();
     $('#result').hide();
     $('#naglowek').hide();
-    var ostatni = localStorage.getItem('ostatni');
+    $('#wyszukiwarkaKonter').show();
+    $('#result').show();
+    $('#naglowek').show();
+    $('#spTitle').empty();
+    $('#spInfo').empty();
+    $('#opis').empty();
+    $('#picture').attr("src", null);
+    $('#spDescription').empty();
+    $('#obsada').empty();
+    $('#actores').empty();
+    $('#emissionDate').empty();
+    $('#emisja').empty();
+    $('#logo').attr("src", null);
+    $('#calendar').hide();
+    var ostatni = localStorage.getItem('last');
+    console.log(ostatni);
     if(ostatni != null){
       var tytul = document.querySelector("#spTitle").appendChild(document.createTextNode(ostatni.movieTitle));
     	document.querySelector("#spInfo").appendChild(document.createTextNode(ostatni.country + ", "  +ostatni.releaseDate))
@@ -261,8 +276,9 @@ function saveToCalendar(){
   var notes = "Milego seansu";
   var success = function(message) { alert("Przypomnienie zostalo dodane"); };
   var error = function(message) { alert("Blad" + message); };
-  window.plugins.calendar.createEvent(title,eventLocation,notes,startDate,endDate,success,error);
   saveToDataStorage();
+  window.plugins.calendar.createEvent(title,eventLocation,notes,startDate,endDate,success,error);
+
 }
 
 function saveToDataStorage(){
