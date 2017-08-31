@@ -13,7 +13,7 @@ function init() {
   przygotujUstawienia();
   przygotujHome();
   przygotujHistory(dodaj);
-  przygotujPrzypomnienie()
+  // przygotujPrzypomnienie()
 }
 
 function onDeviceReady() {
@@ -282,21 +282,43 @@ function injectDetailsTemplate(){
   $('#naglowek').hide();
 }
 
-function saveToCalendar(){
-  // var startDate = new Date(st.emissionYear,st.emissionMonth-1,st.emissionDay,st.hour,st.minute-15,0,0,0); // beware: month 0 = january, 11 = december
-  // var endDate = new Date(st.emissionYear,st.emissionMonth-1,st.emissionDay,st.hour+1,st.minute,0,0,0);
-  var startDate = new Date(2017, 8, 10, 20, 10)
-  var endDate = new Date(2017, 8, 10, 22, 10)
-  var title = "Transmisja "+ st.movieTitle +" na kanale "+ st.station;
-  var eventLocation = "Home";
-  var notes = "Milego seansu";
-  var success = function(message) { alert("Przypomnienie zostalo dodane"); };
-  var error = function(message) { alert("Blad" + message); };
-  saveToDataStorage();
-  window.plugins.calendar.createEvent("tytul","home","Milego seansu",startDate,endDate,success,error);
+// function saveToCalendar(){
+//   // var startDate = new Date(st.emissionYear,st.emissionMonth-1,st.emissionDay,st.hour,st.minute-15,0,0,0); // beware: month 0 = january, 11 = december
+//   // var endDate = new Date(st.emissionYear,st.emissionMonth-1,st.emissionDay,st.hour+1,st.minute,0,0,0);
+//   var startDate = new Date(2017, 8, 10, 20, 10)
+//   var endDate = new Date(2017, 8, 10, 22, 10)
+//   var title = "Transmisja "+ st.movieTitle +" na kanale "+ st.station;
+//   var eventLocation = "Home";
+//   var notes = "Milego seansu";
+//   var success = function(message) { alert("Przypomnienie zostalo dodane"); };
+//   var error = function(message) { alert("Blad" + message); };
+//   saveToDataStorage();
+//   window.plugins.calendar.createEvent("tytul","home","Milego seansu",startDate,endDate,success,error);
+//
+// }
+//
+// function saveToDataStorage(){
+//   localStorage.setItem('last', JSON.stringify(st));
+// }
 
-}
+// ----------------------------------
+$('body').on('click', '#kalendarBtn', function() {
 
-function saveToDataStorage(){
-  localStorage.setItem('last', JSON.stringify(st));
-}
+    var calOptions = window.plugins.calendar.getCalendarOptions(); // grab the defaults
+    calOptions.firstReminderMinutes = 10;
+    calOptions.secondReminderMinutes = 5;
+
+    var startDate = new Date(2017, 8, 10, 20, 10); // beware: month 0 = january, 11 = december
+    var endDate = new Date(2017, 8, 10, 22, 10);
+    var title = "tytul"
+    var eventLocation = "lokacja";
+    var notes = "tvn sherlock holmes";
+    var success = function(message) {
+        alert("Success: Reminder set correctly");
+    };
+    var error = function(message) {
+        alert("Error: something went wrong");
+    };
+    window.plugins.calendar.createEventWithOptions(title, eventLocation, notes, startDate, endDate, calOptions, success, error);
+    localStorage.setItem('last', JSON.stringify(st));
+});
